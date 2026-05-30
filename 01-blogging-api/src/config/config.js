@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import { createClient } from "redis";
 dotenv.config();
 
 async function db() {
@@ -18,4 +19,19 @@ async function db() {
     }
 };
 
-export default db;
+const redisClient = createClient();
+
+redisClient.on("error", (err) => {
+    console.log(`Redis Error : ${err}`);
+});
+
+const connectRedis = async () => {
+    try {
+        await redisClient.connect();
+        console.log("Redis Connected");
+    } catch (error) {
+        console.log(`Redis Connection Failed: ${error}`);
+    }
+}
+
+export { db, redisClient, connectRedis };

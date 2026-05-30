@@ -1,7 +1,9 @@
 import app from "./app.js";
-import db from "./config/db.js";
+import { db, connectRedis } from "./config/config.js";
 
 const PORT = process.env.PORT || 5000;
+
+await connectRedis();
 
 async function startServer() {
     try {
