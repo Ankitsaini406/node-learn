@@ -8,26 +8,26 @@ This repository contains multiple mini-projects that demonstrate core backend co
 
 The purpose of this repository is to:
 
-* Learn Node.js fundamentals
-* Build RESTful APIs with Express.js
-* Understand middleware and error handling
-* Work with Redis for caching
-* Learn Docker and containerization
-* Integrate third-party APIs
-* Practice backend project structure
-* Explore authentication and security concepts
-* Improve debugging and problem-solving skills
+- Learn Node.js fundamentals
+- Build RESTful APIs with Express.js
+- Understand middleware and error handling
+- Work with Redis for caching
+- Learn Docker and containerization
+- Integrate third-party APIs
+- Practice backend project structure
+- Explore authentication and security concepts
+- Improve debugging and problem-solving skills
 
 ## Technologies Used
 
-* Node.js
-* Express.js
-* Redis
-* Docker
-* JavaScript (ES Modules)
-* REST APIs
-* dotenv
-* Express Rate Limit
+- Node.js
+- Express.js
+- Redis
+- Docker
+- JavaScript (ES Modules)
+- REST APIs
+- dotenv
+- Express Rate Limit
 
 ## Projects
 
@@ -37,14 +37,17 @@ A weather API service that fetches data from a third-party weather provider and 
 
 **Concepts Covered**
 
-* Third-party API integration
-* Redis caching
-* Environment variables
-* Rate limiting
-* Error handling
-* Modular Express architecture
+- Third-party API integration
+- Redis caching
+- Environment variables
+- Rate limiting
+- Error handling
+- Modular Express architecture
 
-* GitHub Repository:
+- Roadmap Project:
+  https://roadmap.sh/projects/weather-api-wrapper-service
+
+- GitHub Repository:
   https://github.com/Ankitsaini406/node-learn/tree/main/00-weather-api
 
 ### 2. More Projects Coming Soon
@@ -53,13 +56,13 @@ Additional projects will be added as I continue learning backend development.
 
 Examples include:
 
-* Authentication API
-* URL Shortener
-* Task Manager API
-* File Upload Service
-* Blog API
-* Dockerized Applications
-* JWT Authentication System
+- Authentication API
+- URL Shortener
+- Task Manager API
+- File Upload Service
+- Blog API
+- Dockerized Applications
+- JWT Authentication System
 
 ## Repository Structure
 
@@ -107,14 +110,14 @@ This repository serves as a personal learning log and portfolio of backend devel
 
 ## Future Learning Areas
 
-* TypeScript
-* Microservices
-* Message Queues
-* GraphQL
-* CI/CD Pipelines
-* Kubernetes
-* Cloud Deployment (AWS, Azure, GCP)
-* System Design
+- TypeScript
+- Microservices
+- Message Queues
+- GraphQL
+- CI/CD Pipelines
+- Kubernetes
+- Cloud Deployment (AWS, Azure, GCP)
+- System Design
 
 ## Author
 
