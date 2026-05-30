@@ -76,3 +76,17 @@ export const deleteBlog = asyncHandler(async (req, res) => {
         new ApiResponse(204, null, "No Content")
     )
 });
+
+export const getBlog = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    const blog = await Blog.findById(id);
+
+    if (!blog) {
+        throw new ApiError(404, "BLog not found");
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, blog, "Blog fetched successfully")
+    )
+});
