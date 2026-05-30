@@ -1,5 +1,6 @@
 import { Blog } from "../models/blog.model.js";
 import { ApiError, asyncHandler, validateAllowedFields, ApiResponse } from "../utils/utils.js";
+import slugify from "slugify";
 
 export const createBlog = asyncHandler(async (req, res) => {
 
@@ -7,7 +8,7 @@ export const createBlog = asyncHandler(async (req, res) => {
 
     const { title, content, category, tags } = req.body;
 
-    if (!title || !content || !category, !tags) {
+    if (!title || !content || !category || !tags) {
         throw new ApiError(400, "All fields are required");
     }
 
@@ -17,11 +18,61 @@ export const createBlog = asyncHandler(async (req, res) => {
         throw new ApiError(409, `Blog is already created using this title: ${title}`);
     }
 
-    const blog = Blog.create({
+    const blog = await Blog.create({
         title, content, category, tags
     });
 
     return res.status(201).json(
         new ApiResponse(201, blog, "Blog Created Successfully")
+    )
+});
+
+export const updateBlog = asyncHandler(async (req, res) => {
+
+    validateAllowedFields(req.body, ["title", "content", "category", "tags"]);
+
+    const { id } = req.params;
+
+    const updatedData = { ...req.body };
+
+    if (updatedData.title) {
+        updatedData.slug = slugify(updatedData.title, {
+            lower: true,
+            strict: true,
+            trim: true,
+        });
+    }
+
+    const updatedBlog = await Blog.findByIdAndUpdate(
+        id, {
+            $set: updatedData,
+        },
+        {
+            returnDocument: "after",
+            runValidators: true,
+        }
+    );
+
+    if (!updateBlog) {
+        throw new ApiError(404, "Blog not found");
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, "Blog update successfully")
+    )
+});
+
+export const deleteBlog = asyncHandler(async (req, res) => {
+
+    const { id } = req.params;
+
+    const deletedBlog = await Blog.findByIdAndDelete(id);
+
+    if (!deletedBlog) {
+        throw new ApiError(404, "Blog not found");
+    }
+
+    return res.status(204).json(
+        new ApiResponse(204, null, "No Content")
     )
 });
