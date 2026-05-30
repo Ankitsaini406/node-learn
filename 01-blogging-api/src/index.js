@@ -1,9 +1,12 @@
 import app from "./app.js";
+import db from "./config/db.js";
 
 const PORT = process.env.PORT || 5000;
 
 async function startServer() {
     try {
+        await db();
+
         const server = app.listen(PORT, () => {
             console.log(`🚀 Server running on port ${PORT}`);
         });
@@ -23,3 +26,5 @@ function shutdown(server) {
         process.exit(0);
     });
 }
+
+startServer();
