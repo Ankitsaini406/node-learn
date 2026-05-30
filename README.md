@@ -47,6 +47,8 @@ A weather API service that fetches data from a third-party weather provider and 
 - Roadmap Project:
   https://roadmap.sh/projects/weather-api-wrapper-service
 
+  https://roadmap.sh/projects/blogging-platform-api
+
 - GitHub Repository:
   https://github.com/Ankitsaini406/node-learn/tree/main/00-weather-api
 
