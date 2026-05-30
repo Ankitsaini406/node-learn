@@ -44,6 +44,9 @@ A weather API service that fetches data from a third-party weather provider and 
 * Error handling
 * Modular Express architecture
 
+* GitHub Repository:
+  https://github.com/Ankitsaini406/node-learn/tree/main/00-weather-api
+
 ### 2. More Projects Coming Soon
 
 Additional projects will be added as I continue learning backend development.

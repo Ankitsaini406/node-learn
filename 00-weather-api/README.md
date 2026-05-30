@@ -44,7 +44,7 @@ This project demonstrates:
   https://roadmap.sh/projects/weather-api-wrapper-service
 
 * GitHub Repository:
-  https://github.com/Ankitsaini406/weather-api
+  https://github.com/Ankitsaini406/node-learn/tree/main/00-weather-api
 
 ---
 
