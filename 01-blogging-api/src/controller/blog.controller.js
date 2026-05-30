@@ -45,8 +45,8 @@ export const updateBlog = asyncHandler(async (req, res) => {
 
     const updatedBlog = await Blog.findByIdAndUpdate(
         id, {
-            $set: updatedData,
-        },
+        $set: updatedData,
+    },
         {
             returnDocument: "after",
             runValidators: true,
@@ -88,5 +88,13 @@ export const getBlog = asyncHandler(async (req, res) => {
 
     return res.status(200).json(
         new ApiResponse(200, blog, "Blog fetched successfully")
+    )
+});
+
+export const getAllBlog = asyncHandler(async (req, res) => {
+    const blogs = await Blog.find().sort({ createdAt: -1 });
+
+    return res.status(200).json(
+        new ApiResponse(200, blogs, "All Blogs fetched successfully")
     )
 });
