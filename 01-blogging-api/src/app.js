@@ -1,6 +1,8 @@
 import express from "express";
 import errorMiddleware from "./middleware/error.middleware.js";
 
+import blogRouter from "./routes/blog.routes.js";
+
 const app = express();
 
 app.use(express.json({ limit: "16kb" }));
@@ -12,6 +14,9 @@ app.use(
     })
 );
 
+const api = '/api';
+
+app.use(`${api}/blog`, blogRouter);
 
 app.use((req, res) => {
     res.status(404).json({
