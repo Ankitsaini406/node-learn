@@ -24,7 +24,7 @@ export const createBlog = asyncHandler(async (req, res) => {
 
     return res.status(201).json(
         new ApiResponse(201, blog, "Blog Created Successfully")
-    )
+    );
 });
 
 export const updateBlog = asyncHandler(async (req, res) => {
@@ -59,7 +59,7 @@ export const updateBlog = asyncHandler(async (req, res) => {
 
     return res.status(200).json(
         new ApiResponse(200, "Blog update successfully")
-    )
+    );
 });
 
 export const deleteBlog = asyncHandler(async (req, res) => {
@@ -74,7 +74,7 @@ export const deleteBlog = asyncHandler(async (req, res) => {
 
     return res.status(204).json(
         new ApiResponse(204, null, "No Content")
-    )
+    );
 });
 
 export const getBlog = asyncHandler(async (req, res) => {
@@ -88,7 +88,7 @@ export const getBlog = asyncHandler(async (req, res) => {
 
     return res.status(200).json(
         new ApiResponse(200, blog, "Blog fetched successfully")
-    )
+    );
 });
 
 export const getAllBlog = asyncHandler(async (req, res) => {
@@ -96,5 +96,26 @@ export const getAllBlog = asyncHandler(async (req, res) => {
 
     return res.status(200).json(
         new ApiResponse(200, blogs, "All Blogs fetched successfully")
-    )
+    );
+});
+
+export const searchBlog = asyncHandler(async (req, res) => {
+    const { term } = req.query;
+
+    if (!term) {
+        throw new ApiError(400, "Search term is required");
+    }
+
+    const blogs = await Blog.find({
+        $or: [
+            { title: { $regex: term, $options: "i" } },
+            { content: { $regex: term, $options: "i" } },
+            { category: { $regex: term, $options: "i" } },
+            { tags: { $in : [new RegExp(term, "i")] } },
+        ],
+    });
+
+    return res.status(200).json(
+        new ApiResponse(200, blogs, "Search results")
+    );
 });
