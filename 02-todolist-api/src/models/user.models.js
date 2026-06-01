@@ -31,22 +31,21 @@ const userSchema = new Schema(
 /* ------------------ HASH PASSWORD ------------------ */
 
 userSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) {
-        return next();
-    }
+    if (!this.isModified("password")) return;
+
     this.password = await bcrypt.hash(this.password, 10);
 });
 
 /* ------------------ COMPARE PASSWORD ------------------ */
 
-userSchema.method.isPasswordCorrect = async function (password) {
+userSchema.methods.isPasswordCorrect = async function (password) {
     return await bcrypt.compare(password, this.password);
 };
 
 /* ------------------ GENERATE TOKEN ------------------ */
 
-userSchema.method.generateAccessToken = function () {
-    return jwt.sign(
+userSchema.methods.generateAccessToken = function () {
+    const token = jwt.sign(
         {
             _id: this._id,
             email: this.email
@@ -56,18 +55,21 @@ userSchema.method.generateAccessToken = function () {
             expiresIn: process.env.ACCESS_TOKEN_EXPIRY || "15m",
         }
     );
+    return token;
 };
 
-userSchema.method.generateRefreshToken = function () {  
-    return jwt.sign(
+userSchema.methods.generateRefreshToken = function () {
+    const token = jwt.sign(
         {
             _id: this._id,
+            email: this.email
         },
         process.env.REFRESH_TOKEN_SECRET,
         {
             expiresIn: process.env.REFRESH_TOKEN_EXPIRY || "7d",
         }
     );
+    return token;
 };
 
 export const User = mongoose.model("User", userSchema);

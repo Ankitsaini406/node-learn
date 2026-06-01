@@ -17,7 +17,7 @@ export async function verifyToken(req, res, next) {
 
         if (!user) {
             return res.status(401).json({
-                success: true,
+                success: false,
                 message: "Invalid Access Token"
             });
         }

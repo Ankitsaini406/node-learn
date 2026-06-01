@@ -12,7 +12,8 @@ async function generateAccessAndRefreshToken(userId) {
         return { accessToken, refreshToken };
 
     } catch (error) {
-        return Error("Something went wrong while generating refresh and access token");
+        console.log("TOKEN GENERATION ERROR:", error);
+        throw error;
     }
 }
 
@@ -65,7 +66,7 @@ export async function login(req, res) {
             });
         }
 
-        const user = User.findOne({ email });
+        const user = await User.findOne({ email });
 
         if (!user) {
             return res.status(401).json({
@@ -111,11 +112,11 @@ export async function login(req, res) {
 export async function logout(req, res) {
     try {
         await User.findByIdAndUpdate(req.user._id, {
-            $set: {
-                refreshToken: undefined
+            $unset: {
+                refreshToken: 1
             }
         }, {
-            new: true
+            returnDocument: "after"
         });
 
         const option = {
