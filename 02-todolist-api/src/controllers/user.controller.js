@@ -1,5 +1,21 @@
 import { User } from "../models/user.models.js"
 
+async function generateAccessAndRefreshToken(userId) {
+    try {
+        const user = await User.findById(userId);
+        const accessToken = user.generateAccessToken();
+        const refreshToken = user.generateRefreshToken();
+
+        user.refreshToken = refreshToken;
+        await user.save({ validateBeforeSave: false });
+
+        return { accessToken, refreshToken };
+
+    } catch (error) {
+        return Error("Something went wrong while generating refresh and access token");
+    }
+}
+
 export async function register(req, res) {
     try {
         const { email, name, password } = req.body;
@@ -37,3 +53,90 @@ export async function register(req, res) {
         });
     }
 };
+
+export async function login(req, res) {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: "Email and Password is required"
+            });
+        }
+
+        const user = User.findOne({ email });
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid user email credentials"
+            });
+        }
+
+        const isPassword = await user.isPasswordCorrect(password);
+
+        if (!isPassword) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid user credentials"
+            });
+        }
+
+        const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id);
+        const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
+
+        const option = {
+            httpOnly: true,
+            secure: true,
+        };
+
+        return res.status(200)
+            .cookie("accessToken", accessToken, option)
+            .cookie("refreshToken", refreshToken, option)
+            .json({
+                success: true,
+                message: "User logged in successfully",
+                data: loggedInUser, accessToken, refreshToken
+            });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+export async function logout(req, res) {
+    try {
+        await User.findByIdAndUpdate(req.user._id, {
+            $set: {
+                refreshToken: undefined
+            }
+        }, {
+            new: true
+        });
+
+        const option = {
+            httpOnly: true,
+            secure: true,
+        };
+
+        return res
+            .status(200)
+            .clearCookie("accessToken", option)
+            .clearCookie("refreshToken", option)
+            .json({
+                success: true,
+                data: {},
+                message: "User logged out"
+            });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Server error"
+        });
+    }
+}

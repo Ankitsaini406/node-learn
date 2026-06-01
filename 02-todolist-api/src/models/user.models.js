@@ -19,7 +19,7 @@ const userSchema = new Schema(
             type: String,
             required: [true, 'Password is required']
         },
-        token: {
+        refreshToken: {
             type: String,
         }
     },
@@ -43,7 +43,7 @@ userSchema.method.isPasswordCorrect = async function (password) {
     return await bcrypt.compare(password, this.password);
 };
 
-/* ------------------ GENERATE ACCESS TOKEN ------------------ */
+/* ------------------ GENERATE TOKEN ------------------ */
 
 userSchema.method.generateAccessToken = function () {
     return jwt.sign(
@@ -53,7 +53,19 @@ userSchema.method.generateAccessToken = function () {
         },
         process.env.ACCESS_TOKEN_SECRET,
         {
-            expiresIn: process.env.ACCESS_TOKEN_EXPIRY || "1d",
+            expiresIn: process.env.ACCESS_TOKEN_EXPIRY || "15m",
+        }
+    );
+};
+
+userSchema.method.generateRefreshToken = function () {  
+    return jwt.sign(
+        {
+            _id: this._id,
+        },
+        process.env.REFRESH_TOKEN_SECRET,
+        {
+            expiresIn: process.env.REFRESH_TOKEN_EXPIRY || "7d",
         }
     );
 };

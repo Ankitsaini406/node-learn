@@ -1,11 +1,13 @@
 import express from "express";
 import errorMiddleware from "./middleware/error.middleware.js";
+import cookieParser from "cookie-parser";
 
 import userRoute from "./routes/user.route.js";
 
 const app = express();
 
 app.use(express.json({ limit: "16kb" }));
+app.use(cookieParser());
 
 app.use(
     express.urlencoded({
