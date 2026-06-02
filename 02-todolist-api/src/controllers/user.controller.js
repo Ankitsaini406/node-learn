@@ -1,4 +1,5 @@
 import { User } from "../models/user.models.js"
+import jwt from "jsonwebtoken";
 
 async function generateAccessAndRefreshToken(userId) {
     try {
@@ -135,9 +136,60 @@ export async function logout(req, res) {
             });
 
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: "Server error"
+        });
+    }
+}
+
+export async function refreshAccessToken(req, res) {
+    try {
+        const incomingRefreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
+        if (!incomingRefreshToken) {
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized request"
+            });
+        }
+
+        const decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+        const user = await User.findById(decodedToken?._id);
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid refresh token"
+            });
+        }
+
+        if (incomingRefreshToken !== user.refreshToken) {
+            return res.status(401).json({
+                success: false,
+                message: "Refresh token is expired or used"
+            });
+        }
+
+        const option = {
+            httpOnly: true,
+            secure: true,
+        };
+
+        const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id);
+
+        return res.status(200)
+            .cookie("accessToken", accessToken, option)
+            .cookie("refreshToken", refreshToken, option)
+            .json({
+                success: true,
+                data: { accessToken, refreshToken },
+                message: "Access token refreshed"
+            });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message || "Invalid refresh token"
         });
     }
 }
