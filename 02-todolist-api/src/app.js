@@ -3,6 +3,7 @@ import errorMiddleware from "./middleware/error.middleware.js";
 import cookieParser from "cookie-parser";
 
 import userRoute from "./routes/user.route.js";
+import todoRouter from "./routes/todo.route.js";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(
 const api = '/api';
 
 app.use(`${api}/user`, userRoute);
+app.use(`${api}/blog`, todoRouter);
 
 app.use((req, res) => {
     res.status(404).json({
