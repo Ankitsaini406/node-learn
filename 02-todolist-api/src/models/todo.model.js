@@ -5,6 +5,9 @@ const todoSchema = new Schema(
         title: {
             type: String,
         },
+        userId: {
+            type: String,
+        },
         description: {
             type: String,
         }

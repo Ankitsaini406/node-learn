@@ -20,7 +20,7 @@ app.use(
 const api = '/api';
 
 app.use(`${api}/user`, userRoute);
-app.use(`${api}/blog`, todoRouter);
+app.use(`${api}/todo`, todoRouter);
 
 app.use((req, res) => {
     res.status(404).json({
