@@ -51,6 +51,8 @@ A weather API service that fetches data from a third-party weather provider and 
 
   https://roadmap.sh/projects/todo-list-api
 
+  https://roadmap.sh/projects/url-shortening-service
+
 - GitHub Repository:
   https://github.com/Ankitsaini406/node-learn/tree/main/00-weather-api
 
