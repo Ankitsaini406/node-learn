@@ -1,4 +1,5 @@
 import express from "express";
+import urlRoute from "./routes/url.route.js";
 
 const app = express();
 
@@ -11,6 +12,8 @@ app.use(
 );
 
 const api = "/api";
+
+app.use(`${api}`, urlRoute);
 
 app.use((req, res) => {
     res.status(404).json({
