@@ -6,17 +6,31 @@ const urlSchema = new Schema(
             type: String,
             required: true,
             unique: true,
+            index: true,
         },
+
         url: {
             type: String,
             required: true,
+            trim: true,
         },
+
+        totalClicks: {
+            type: Number,
+            default: 0,
+        },
+
         visitHistory: [
-            { timeStamp: { type: Number }}
+            {
+                timestamp: {
+                    type: Date,
+                    default: Date.now,
+                },
+            },
         ],
     },
     {
-        timestamps: true
+        timestamps: true,
     }
 );
 
